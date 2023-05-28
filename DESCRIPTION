@@ -1,10 +1,10 @@
-Package: knockoffr
+Package: knockoffsr
 Type: Package
 Title: Variable Selection with Knockoffs
 Version: 0.1.0
 Authors@R: person("Benjamin", "Chu", email = "bbchu@stanford.edu", role = c("aut", "cre", "cph"))
 Maintainer: The package maintainer <yourself@somewhere.net>
-Description: An interface to 'Knockoffs.jl' <https://github.com/biona001/Knockoffs.jl> from the R programming language. It has unique high performance methods for sampling various model-X knockoffs and ships with built-in routines for variable selection. Much of the functionality are unique and allow for orders of magnitude speedup over conventional methods. 'knockoffr' attaches an R interface onto the package, allowing seamless use of this tooling by R users. 
+Description: An interface to 'Knockoffs.jl' <https://github.com/biona001/Knockoffs.jl> from the R programming language. It has unique high performance methods for sampling various model-X knockoffs and ships with built-in routines for variable selection. Much of the functionality are unique and allow for orders of magnitude speedup over conventional methods. 'knockoffsr' attaches an R interface onto the package, allowing seamless use of this tooling by R users. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
