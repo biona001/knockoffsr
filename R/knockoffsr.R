@@ -1,3 +1,17 @@
+#' Setup knockoffsr
+#'
+#' This function initializes Julia and the Knockoffs.jl package.
+#' This will install Julia and the required packages
+#' if they are missing.
+#'
+#' @param pkg_check logical, check if Knockoffs.jl package exist and install if necessary
+#' @param ... Parameters are passed down to JuliaCall::julia_setup
+#'
+#' @examples
+#'
+#' knockoffsr::knockoff_setup()
+#'
+#' @export
 knockoff_setup <- function (pkg_check=TRUE,...){
   julia <- JuliaCall::julia_setup(installJulia=TRUE,...)
   if(pkg_check) JuliaCall::julia_install_package_if_needed("Knockoffs")
@@ -11,3 +25,4 @@ knockoff_setup <- function (pkg_check=TRUE,...){
   JuliaCall::autowrap("MarginalKnockoffFilter", fields = c("y","X","m", "ko", "selected", "W"))
   ko
 }
+
