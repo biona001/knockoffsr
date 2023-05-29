@@ -1,14 +1,15 @@
 # knockoffsr
 
-knockoffsr is a package for performing variable selecting via the knockoff filter. It utilizes [Knockoffs.jl](https://github.com/biona001/Knockoffs.jl) at its core to provide high-performance routines of various model-X solvers (SDP, ME, MVR), sampling knockoffs, and computing feature importance scores. 
+An interface to [Knockoffs.jl](https://github.com/biona001/Knockoffs.jl) from the R programming language. `knockoffsr` provides unique high performance methods for sampling various model-X knockoffs and ships with built-in routines for variable selection. Much of the functionality are unique and allow for orders of magnitude speedup over conventional methods. 'knockoffsr' attaches an R interface onto the package, allowing seamless use of this tooling by R users. 
 
 ## Installation
 
+First install the package
 ```R
 library(devtools)
 install_github("biona001/knockoffsr")
 ```
-Test package is successfully installed
+Then, install [Julia](https://julialang.org/downloads/), and test package is successfully installed
 ```R
 julia_dir = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin" # path to Julia executable
 library(knockoffsr)
