@@ -13,7 +13,9 @@ SystemRequirements: Julia (>= 1.8), Knockoffs.jl
 Imports:
   JuliaCall
 RoxygenNote: 7.2.3
-Suggests: testthat,
+Suggests: 
+    testthat (>= 3.0.0),
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+Config/testthat/edition: 3
