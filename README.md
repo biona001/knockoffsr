@@ -5,17 +5,15 @@ knockoffsr is a package for performing variable selecting via the knockoff filte
 ## Installation
 
 ```R
-install.packages("knockoffsr")
+library(devtools)
+install_github("biona001/knockoffsr")
 ```
-
 Test package is successfully installed
 ```R
 julia_dir = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin" # path to Julia executable
 library(knockoffsr)
 ko <- knockoffsr::knockoff_setup(julia_dir)
 ```
-
-Note that the first invocation of `knockoffsr::knockoff_setup()` will install both Julia and the required packages if they are missing. 
 
 ## Usage
 
@@ -26,7 +24,7 @@ Note that the first invocation of `knockoffsr::knockoff_setup()` will install bo
 
 This syntax follows the practice of [diffeqr](https://github.com/SciML/diffeqr/tree/master).
 
-## Exact model-X group knockoffs
+## Example: Exact model-X group knockoffs
 
 First setup the package
 ```R
@@ -46,8 +44,8 @@ X <- MASS::mvrnorm(n=n, mu=mu, Sigma=Sigma)
 ```
 We generate model-X group knockoffs as follows
 ```R
-> solver <- "maxent" # Maximum entropy solver, other choices include "mvr", "sdp", "equi"
-> result <- ko$modelX_gaussian_group_knockoffs(X, solver, groups, mu, Sigma, verbose=TRUE)
+solver <- "maxent" # Maximum entropy solver, other choices include "mvr", "sdp", "equi"
+result <- ko$modelX_gaussian_group_knockoffs(X, solver, groups, mu, Sigma, verbose=TRUE)
 
 Maxent initial obj = -2087.692936466681
 Iter 1 (PCA): obj = -1607.437164111949, δ = 0.48068405334794, t1 = 0.08, t2 = 0.51
