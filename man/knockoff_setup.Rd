@@ -4,9 +4,11 @@
 \alias{knockoff_setup}
 \title{Setup knockoffsr}
 \usage{
-knockoff_setup(pkg_check = TRUE, ...)
+knockoff_setup(julia_dir, pkg_check = TRUE, ...)
 }
 \arguments{
+\item{julia_dir}{string, path to folder containing Julia executable}
+
 \item{pkg_check}{logical, check if Knockoffs.jl package exist and install if necessary}
 
 \item{...}{Parameters are passed down to JuliaCall::julia_setup}
