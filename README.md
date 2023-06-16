@@ -4,36 +4,39 @@ An interface to [Knockoffs.jl](https://github.com/biona001/Knockoffs.jl) from th
 
 ## Installation
 
-First install the package
+`knockoffsr` is not on CRAN yet. One can install the package using devtools:
 ```R
 library(devtools)
 install_github("biona001/knockoffsr")
 ```
-Then, install [Julia](https://julialang.org/downloads/), and test package is successfully installed
+Check installation is successful:
 ```R
-julia_dir = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin" # path to Julia executable
 library(knockoffsr)
+ko <- knockoffsr::knockoff_setup()
+```
+
+## What if installation fails
+
+Sometimes Julia cannot be automatically installed. In this case, one should manually install [Julia](https://julialang.org/downloads/), then give `knockoffsr` the path to Julia's executable
+```R
+library(knockoffsr)
+julia_dir = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin" # path to Julia executable
 ko <- knockoffsr::knockoff_setup(julia_dir)
 ```
 
 ## Usage
 
-`knockoffsr` provides a direct wrapper over `Knockoffs.jl`. The namespace is setup so that the standard syntax of Julia translates directly over to the R environment. There are two things to keep in mind:
+`knockoffsr` provides a direct wrapper over `Knockoffs.jl`, see the [documentation of Knockoffs.jl](https://biona001.github.io/Knockoffs.jl/dev/) for more detail. The namespace is setup so that the standard syntax of Julia translates directly over to the R environment. There are 3 things to keep in mind:
 
 + All `Knockoffs.jl` commands are prefaced by `ko$`
 + All commands with a `!` are replaced with `_bang`, for example `solve_s!` becomes `solve_s_bang`.
++ All `Knockoffs.jl` functions that require a `Symmetric` matrix as inputs now accepts a regular matrix. However, for `hc_partition_groups` and `id_partition_groups`, one must set an extra argument `isSymmetric` to be `TRUE` or `FALSE`.
 
 This syntax follows the practice of [diffeqr](https://github.com/SciML/diffeqr/tree/master).
 
 ## Example: Exact model-X group knockoffs
 
-First setup the package
-```R
-julia_dir = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin" # path to Julia executable
-library(knockoffsr)
-ko <- knockoffsr::knockoff_setup(julia_dir)
-```
-Next lets simulate `X ~ N(0, Sigma)` where `Sigma` is a symmetric Toesplitz matrix. Here we assume every 5 variables form a group
+Lets simulate `X ~ N(0, Sigma)` where `Sigma` is a symmetric Toesplitz matrix. Here we assume every 5 variables form a group
 ```R
 n <- 1000          # number of samples
 p <- 1000          # number of covariates

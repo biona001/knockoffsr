@@ -13,9 +13,12 @@
 #' knockoffsr::knockoff_setup()
 #'
 #' @export
-knockoff_setup <- function(julia_dir, pkg_check=TRUE, ...){
-  #julia <- JuliaCall::julia_setup(installJulia=TRUE,...)
-  julia <- JuliaCall::julia_setup(JULIA_HOME = julia_dir, ...)
+knockoff_setup <- function(julia_dir="", pkg_check=TRUE, ...){
+  if(julia_dir==""){
+    julia <- JuliaCall::julia_setup(installJulia=TRUE,...)
+  } else {
+    julia <- JuliaCall::julia_setup(JULIA_HOME = julia_dir, ...)
+  }
   if(pkg_check) JuliaCall::julia_install_package_if_needed("Knockoffs")
   JuliaCall::julia_library("Knockoffs")
 
