@@ -28,7 +28,7 @@ devtools::install_local("knockoffsr.zip")
 2. **Julia cannot be installed automatically.** In this case, one should manually install [Julia](https://julialang.org/downloads/), then give `knockoffsr` the path to Julia's executable
 ```R
 library(knockoffsr)
-julia_dir = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin" # path to Julia executable
+julia_dir = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin" # path to folder that containins the Julia executable
 ko <- knockoffsr::knockoff_setup(julia_dir)
 ```
 
@@ -54,7 +54,7 @@ The first 2 syntax follows the practice of [diffeqr](https://github.com/SciML/di
 
 Since `knockoffsr` is a wrapper of [`Knockoffs.jl`](https://github.com/biona001/Knockoffs.jl), the [documentation of Knockoffs.jl](https://biona001.github.io/Knockoffs.jl/dev/) will be the main source of documentation for `knockoffsr`.
 
-## Example: Exact model-X group knockoffs
+## Example 1: Exact model-X group knockoffs
 
 Lets simulate `X ~ N(0, Sigma)` where `Sigma` is a symmetric Toesplitz matrix. Here we assume every 5 variables form a group
 ```R
@@ -69,7 +69,7 @@ X <- MASS::mvrnorm(n=n, mu=mu, Sigma=Sigma)
 We generate model-X group knockoffs as follows
 ```R
 solver <- "maxent" # Maximum entropy solver, other choices include "mvr", "sdp", "equi"
-result <- ko$modelX_gaussian_group_knockoffs(X, solver, groups, mu, Sigma, verbose=TRUE)
+result <- ko$modelX_gaussian_group_knockoffs(X, solver, groups, mu, Sigma, m=m, verbose=TRUE)
 
 Maxent initial obj = -2087.692936466681
 Iter 1 (PCA): obj = -1607.437164111949, δ = 0.48068405334794, t1 = 0.08, t2 = 0.51
@@ -98,4 +98,47 @@ To extract the knockoffs, S matrix, and the final objective as
 Xko <- result$Xko
 S <- result$S
 obj <- result$obj
+```
+
+## Example 2: Defining group memeberships
+
+We provide useful utilities functions to define groups empirically, based on data matrix `X` or directly on the covariance matrix `Sigma`. 
+
+Using hierarchical clustering (input is design matrix `X`):
+```R
+isCovariance = FALSE
+groups = ko$hc_partition_groups(X, isCovariance, linkage="average", cutoff=0.5)
+str(groups)
+
+ int [1:1000] 1 1 2 2 3 3 4 4 5 5 ...
+```
+
+Using hierarchical clustering (input is covariance matrix `Sigma`):
+```R
+isCovariance = TRUE
+groups = ko$hc_partition_groups(Sigma, isCovariance, linkage="average", cutoff=0.5)
+str(groups)
+
+ int [1:1000] 1 1 1 1 2 2 2 2 3 3 ...
+```
+
+## Example 3: Feature selection via Lasso
+
+To run Lasso and apply knockoff-filter, one option is to feed in the knockoff variable `result` created in example 1. 
+
+```R
+# first simulate a response with k=10 causal variables drawn from N(0, 1)
+k <- 10
+beta <- sample(c(rnorm(k), rep(0, p-k)))
+y <- X %*% beta + rnorm(n)
+
+# fit lasso and apply knockoff filter, where default FDR = 0.01, 0.05, 0.1, 0.25, 0.5
+ko_filter = ko$fit_lasso(y, result)
+
+# get selected groups
+selected1 <- ko_filter$selected[1] # selected groups with target FDR = 0.01
+selected2 <- ko_filter$selected[2] # selected groups with target FDR = 0.05 
+selected3 <- ko_filter$selected[3] # ...
+selected4 <- ko_filter$selected[4]
+selected5 <- ko_filter$selected[5]
 ```
