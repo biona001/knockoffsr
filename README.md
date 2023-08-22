@@ -17,22 +17,42 @@ ko <- knockoffsr::knockoff_setup()
 
 ## What if installation fails
 
-Sometimes Julia cannot be automatically installed. In this case, one should manually install [Julia](https://julialang.org/downloads/), then give `knockoffsr` the path to Julia's executable
+1. **`install_github` does not work.** One can download the source code directly and install `knockoffsr` from a local file.
++ `wget -O knockoffsr.zip https://github.com/biona001/knockoffsr/archive/refs/heads/main.zip`
++ Within R, install package locally
+```R
+library(devtools)
+devtools::install_local("knockoffsr.zip")
+```
+
+2. **Julia cannot be installed automatically.** In this case, one should manually install [Julia](https://julialang.org/downloads/), then give `knockoffsr` the path to Julia's executable
 ```R
 library(knockoffsr)
 julia_dir = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin" # path to Julia executable
 ko <- knockoffsr::knockoff_setup(julia_dir)
 ```
 
+3. **Setup script for `JuliaCall` failed due to `LoadError` of from a `Global method definition` call** Please install the development version of [JuliaCall](https://github.com/Non-Contradiction/JuliaCall), see [this issue](https://github.com/Non-Contradiction/JuliaCall/issues/203) and [this issue](https://github.com/Non-Contradiction/JuliaCall/issues/205)
+```R
+library(devtools)
+devtools::install_github("Non-Contradiction/JuliaCall")
+```
+
+If you encounter other installation errors, please file an issue on Github and I'll take a look asap.
+ 
 ## Usage
 
-`knockoffsr` provides a direct wrapper over `Knockoffs.jl`, see the [documentation of Knockoffs.jl](https://biona001.github.io/Knockoffs.jl/dev/) for more detail. The namespace is setup so that the standard syntax of Julia translates directly over to the R environment. There are 3 things to keep in mind:
+`knockoffsr` provides a direct wrapper over [`Knockoffs.jl`](https://github.com/biona001/Knockoffs.jl). The namespace is setup so that the standard syntax of Julia translates directly over to the R environment. There are 3 things to keep in mind:
 
 + All `Knockoffs.jl` commands are prefaced by `ko$`
 + All commands with a `!` are replaced with `_bang`, for example `solve_s!` becomes `solve_s_bang`.
 + All `Knockoffs.jl` functions that require a `Symmetric` matrix as inputs now accepts a regular matrix. However, for `hc_partition_groups` and `id_partition_groups`, one must set an extra argument `isSymmetric` to be `TRUE` or `FALSE`.
 
-This syntax follows the practice of [diffeqr](https://github.com/SciML/diffeqr/tree/master).
+The first 2 syntax follows the practice of [diffeqr](https://github.com/SciML/diffeqr/tree/master).
+
+## Documentation
+
+Since `knockoffsr` is a wrapper of [`Knockoffs.jl`](https://github.com/biona001/Knockoffs.jl), the [documentation of Knockoffs.jl](https://biona001.github.io/Knockoffs.jl/dev/) will be the main source of documentation for `knockoffsr`.
 
 ## Example: Exact model-X group knockoffs
 
