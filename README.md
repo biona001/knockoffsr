@@ -93,14 +93,14 @@ Iter 18 (CCD): obj = -1539.806801955504, δ = 0.008629474061312124, t1 = 1.65, t
 Iter 19 (PCA): obj = -1539.6892344905818, δ = 0.020162878516815832, t1 = 1.71, t2 = 15.39
 Iter 20 (CCD): obj = -1539.5543495056943, δ = 0.007951906306608823, t1 = 1.81, t2 = 16.53, t3 = 0.02
 ```
-To extract the knockoffs, S matrix, and the final objective as
+To extract the knockoffs, S matrix, and the final objective, one can do:
 ```R
 Xko <- result$Xko
 S <- result$S
 obj <- result$obj
 ```
 
-## Example 2: Defining group memeberships
+## Example 2: Defining group memberships
 
 We provide useful utilities functions to define groups empirically, based on data matrix `X` or directly on the covariance matrix `Sigma`. 
 
