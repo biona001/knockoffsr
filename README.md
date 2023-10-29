@@ -46,7 +46,7 @@ If you encounter other installation errors, please file an issue on Github and I
 
 + All `Knockoffs.jl` commands are prefaced by `ko$`
 + All commands with a `!` are replaced with `_bang`, for example `solve_s!` becomes `solve_s_bang`.
-+ All `Knockoffs.jl` functions that require a `Symmetric` matrix as inputs now accepts a regular matrix. However, for `hc_partition_groups` and `id_partition_groups`, one must set an extra argument `isSymmetric` to be `TRUE` or `FALSE`.
++ All `Knockoffs.jl` functions that require a `Symmetric` matrix as inputs now accepts a regular matrix. However, for `hc_partition_groups` and `id_partition_groups`, one must set an extra argument `isCovariance` to be `TRUE` or `FALSE`.
 
 The first 2 syntax follows the practice of [diffeqr](https://github.com/SciML/diffeqr/tree/master).
 
