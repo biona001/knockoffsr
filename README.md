@@ -50,6 +50,17 @@ If you encounter other installation errors, please file an issue on Github and I
 
 The first 2 syntax follows the practice of [diffeqr](https://github.com/SciML/diffeqr/tree/master).
 
+## Updating package
+
+It is recommended to update the internal `Knockoffs.jl` julia package, whenever it makes new releases. This can be achieved in `R` via
+
+```R
+library(JuliaCall)
+julia_update_package("Knockoffs")
+ko <- knockoffsr::knockoff_setup()
+# ... perform knockoff analysis
+```
+
 ## Documentation
 
 Since `knockoffsr` is a wrapper of [`Knockoffs.jl`](https://github.com/biona001/Knockoffs.jl), the [documentation of Knockoffs.jl](https://biona001.github.io/Knockoffs.jl/dev/) will be the main source of documentation for `knockoffsr`.
@@ -141,6 +152,31 @@ selected2 <- ko_filter$selected[2] # selected groups with target FDR = 0.05
 selected3 <- ko_filter$selected[3] # ...
 selected4 <- ko_filter$selected[4]
 selected5 <- ko_filter$selected[5]
+```
+
+## Example 4: Ghost Knockoffs
+
+Given a correlation matrix `Sigma` and a vector of Z-scores `z`, one can generate the knockoffs of `z` directly, so called *ghost knockoffs* as derived in [this paper](https://www.nature.com/articles/s41467-022-34932-z). To illustrate this, in the following, we will
+1. Simulate artificial correlation matrix and Z scores
+2. Define groups by average linkage hierarchical clustering, and choose group-key variables within groups by applying a best-subset seletion algorithm with default cutoff value `c=0.5`. This follows [this paper](https://arxiv.org/abs/2310.15069).
+3. Sample ghost knockoffs
+
+```R
+# 1. simulate data
+p <- 1000 
+Sigma <- toeplitz(0.7^(0:(p-1)))
+z <- MASS::mvrnorm(mu=rep(0, p), Sigma=Sigma)
+
+# 2. define groups and group-key variables
+isCovariance = TRUE
+groups <- ko$hc_partition_groups(Sigma, isCovariance, cutoff=0.5, linkage="average")
+group_reps <- ko$choose_group_reps(Sigma, groups, threshold=0.5)
+
+# 3. solve group knockoff optimization problem and generate ghostknockoffs
+m <- 5
+method <- "maxent"
+result <- ko$solve_s_graphical_group(Sigma, groups, group_reps, method, m=m, verbose=TRUE)
+zko <- ko$ghost_knockoffs(z, result[[2]], solve(Sigma), m=as.integer(m))
 ```
 
 ## Citation and reproducibility
