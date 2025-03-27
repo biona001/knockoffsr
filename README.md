@@ -9,7 +9,7 @@ An interface to [Knockoffs.jl](https://github.com/biona001/Knockoffs.jl) from th
 library(devtools)
 install_github("biona001/knockoffsr")
 ```
-Check installation is successful:
+Next, load the package within R:
 ```R
 library(knockoffsr)
 ko <- knockoffsr::knockoff_setup()
