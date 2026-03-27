@@ -28,7 +28,7 @@ devtools::install_local("knockoffsr.zip")
 2. **Julia cannot be installed automatically.** In this case, one should manually install [Julia](https://julialang.org/downloads/), then give `knockoffsr` the path to Julia's executable
 ```R
 library(knockoffsr)
-julia_dir = "/Applications/Julia-1.8.app/Contents/Resources/julia/bin" # path to folder that containins the Julia executable
+julia_dir = "/Users/biona001/.juliaup/bin" # path to folder that containins the Julia executable
 ko <- knockoffsr::knockoff_setup(julia_dir)
 ```
 
@@ -143,15 +143,9 @@ k <- 10
 beta <- sample(c(rnorm(k), rep(0, p-k)))
 y <- X %*% beta + rnorm(n)
 
-# fit lasso and apply knockoff filter, where default FDR = 0.01, 0.05, 0.1, 0.25, 0.5
+# fit lasso, apply knockoff filter, and select variables at 10% FDR
 ko_filter = ko$fit_lasso(y, result)
-
-# get selected groups
-selected1 <- ko_filter$selected[1] # selected groups with target FDR = 0.01
-selected2 <- ko_filter$selected[2] # selected groups with target FDR = 0.05 
-selected3 <- ko_filter$selected[3] # ...
-selected4 <- ko_filter$selected[4]
-selected5 <- ko_filter$selected[5]
+res = ko$select_variables(ko_filter, 0.1)
 ```
 
 ## Example 4: Ghost Knockoffs
