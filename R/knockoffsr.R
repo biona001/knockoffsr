@@ -15,7 +15,13 @@
 #' @export
 knockoff_setup <- function(julia_dir="", pkg_check=TRUE, ...){
   if(julia_dir==""){
-    julia <- JuliaCall::julia_setup(installJulia=TRUE,...)
+    julia_home <- detect_julia_home()
+    install_julia <- is.null(julia_home)
+    julia <- JuliaCall::julia_setup(
+      JULIA_HOME = julia_home,
+      installJulia = install_julia,
+      ...
+    )
   } else {
     julia <- JuliaCall::julia_setup(JULIA_HOME = julia_dir, ...)
   }
@@ -25,6 +31,15 @@ knockoff_setup <- function(julia_dir="", pkg_check=TRUE, ...){
   functions <- JuliaCall::julia_eval("filter(isascii, replace.(string.(propertynames(Knockoffs)),\"!\"=>\"_bang\"))")
   ko <- julia_pkg_import("Knockoffs",functions)
   ko
+}
+
+# Use the Julia executable visible from PATH (e.g. juliaup) when possible.
+detect_julia_home <- function() {
+  julia_bin <- Sys.which("julia")
+  if (!nzchar(julia_bin)) {
+    return(NULL)
+  }
+  normalizePath(dirname(julia_bin), winslash = "/", mustWork = FALSE)
 }
 
 # from: https://github.com/SciML/diffeqr/blob/master/R/diffeqr.R
@@ -60,4 +75,3 @@ julia_pkg_import <- function(pkg_name, func_list){
   }
   env
 }
-
